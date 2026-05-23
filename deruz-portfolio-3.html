@@ -1,0 +1,1553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deruz — Brand Storyteller & Marcom Strategist</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #080808;
+    --off-black: #111010;
+    --charcoal: #1C1C1C;
+    --smoke: #2A2A2A;
+    --ash: #3D3D3D;
+    --mist: #888;
+    --silver: #C8C8C8;
+    --white: #F5F3EF;
+    --accent: #D4FF00; /* electric lime — raw energy */
+    --accent2: #FF4820; /* ember orange */
+    --accent3: #00C9A7; /* teal */
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Crimson Pro', serif;
+    font-weight: 300;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.08s, width 0.2s, height 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid rgba(212,255,0,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease-out, width 0.25s, height 0.25s;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* ── GRAIN OVERLAY ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9997;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 60px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    backdrop-filter: blur(12px);
+    background: rgba(8,8,8,0.7);
+  }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--mist);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  .nav-handle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--ash);
+    letter-spacing: 0.1em;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(180px, 22vw, 340px);
+    color: rgba(255,255,255,0.025);
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    user-select: none;
+    animation: drift 18s ease-in-out infinite alternate;
+  }
+
+  @keyframes drift {
+    from { transform: translate(-50%, -50%) translateX(-20px); }
+    to   { transform: translate(-50%, -50%) translateX(20px); }
+  }
+
+  .hero-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: slideIn 0.8s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 150px);
+    line-height: 0.92;
+    letter-spacing: 0.02em;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: slideIn 0.9s 0.5s forwards;
+  }
+
+  .hero-title span { color: var(--accent); }
+
+  .hero-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    opacity: 0;
+    animation: slideIn 0.8s 0.8s forwards;
+  }
+
+  .hero-bio {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--silver);
+    max-width: 520px;
+    font-style: italic;
+  }
+
+  .hero-meta {
+    text-align: right;
+  }
+
+  .hero-meta .big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--accent2);
+  }
+
+  .hero-meta .num-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+
+  /* scroll line */
+  .scroll-line {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.4s forwards;
+  }
+
+  .scroll-line span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ash);
+    writing-mode: vertical-rl;
+  }
+
+  .scroll-line::after {
+    content: '';
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--ash), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; }
+    50%       { opacity: 1; }
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    border-top: 1px solid var(--smoke);
+    border-bottom: 1px solid var(--smoke);
+    overflow: hidden;
+    padding: 18px 0;
+    background: var(--off-black);
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 60px;
+    animation: marquee 22s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    color: var(--ash);
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    flex-shrink: 0;
+  }
+
+  .marquee-item::after {
+    content: '◆';
+    color: var(--accent);
+    font-size: 10px;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 100px 60px; }
+
+  .sec-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .sec-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 6vw, 80px);
+    line-height: 1;
+    margin-bottom: 64px;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    background: var(--off-black);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .about-text p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--silver);
+    margin-bottom: 20px;
+  }
+
+  .about-text p em { color: var(--accent); font-style: italic; }
+
+  .about-handles {
+    margin-top: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .handle-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--mist);
+  }
+
+  .handle-row .platform {
+    width: 100px;
+    color: var(--ash);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .handle-row .handle-name {
+    color: var(--white);
+  }
+
+  .about-right { padding-top: 60px; }
+
+  .brand-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .brand-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: var(--charcoal);
+    border-left: 3px solid transparent;
+    transition: border-color 0.25s, background 0.25s;
+  }
+
+  .brand-row:hover {
+    border-left-color: var(--accent);
+    background: var(--smoke);
+  }
+
+  .brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.08em;
+  }
+
+  .brand-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+
+  /* ── WORK ── */
+  .work { background: var(--black); }
+
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+
+  .work-card {
+    background: var(--charcoal);
+    padding: 44px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+
+  .work-card::before {
+    content: attr(data-num);
+    position: absolute;
+    top: -10px; right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: rgba(255,255,255,0.04);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .work-card:hover { transform: translateY(-6px); }
+
+  .work-card:nth-child(2) .work-accent { color: var(--accent2); }
+  .work-card:nth-child(3) .work-accent { color: var(--accent3); }
+
+  .work-accent {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .work-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 0.04em;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  .work-desc {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--mist);
+    margin-bottom: 28px;
+  }
+
+  .work-stat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .work-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ash);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ── PHILOSOPHY ── */
+  .philosophy {
+    background: var(--accent);
+    padding: 100px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .philosophy::before {
+    content: '"';
+    position: absolute;
+    top: -60px; left: 30px;
+    font-family: 'Crimson Pro', serif;
+    font-size: 500px;
+    color: rgba(0,0,0,0.06);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .philosophy .sec-label { color: rgba(0,0,0,0.5); }
+
+  .philosophy-quote {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(28px, 4vw, 54px);
+    line-height: 1.3;
+    color: var(--black);
+    font-style: italic;
+    max-width: 900px;
+    font-weight: 300;
+  }
+
+  .philosophy-quote strong {
+    font-style: normal;
+    font-weight: 400;
+    border-bottom: 3px solid rgba(0,0,0,0.3);
+  }
+
+  /* ── ACHIEVEMENTS ── */
+  .achievements { background: var(--off-black); }
+
+  .ach-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 60px;
+  }
+
+  .ach-card {
+    background: var(--charcoal);
+    padding: 40px 32px;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .ach-card:hover { background: var(--smoke); }
+
+  .ach-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .ach-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .ach-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mist);
+  }
+
+  .awards-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+  }
+
+  .award-row {
+    background: var(--charcoal);
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    transition: background 0.25s;
+  }
+
+  .award-row:hover { background: var(--smoke); }
+
+  .award-year {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--accent2);
+    min-width: 80px;
+  }
+
+  .award-info {}
+
+  .award-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+
+  .award-detail {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--mist);
+    letter-spacing: 0.08em;
+  }
+
+  /* ── SKILLS ── */
+  .skills-sec { background: var(--black); }
+
+  .skills-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+  }
+
+  .skill-row {
+    margin-bottom: 32px;
+  }
+
+  .skill-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--silver);
+  }
+
+  .skill-pct { color: var(--accent); }
+
+  .skill-track {
+    height: 2px;
+    background: var(--smoke);
+    position: relative;
+    overflow: visible;
+  }
+
+  .skill-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0;
+    transition: width 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .skill-bar::after {
+    content: '';
+    position: absolute;
+    right: -4px; top: -4px;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+
+  .certs {
+    margin-top: 48px;
+  }
+
+  .cert-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  .cert-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent3);
+    flex-shrink: 0;
+  }
+
+  .cert-name {
+    font-size: 15px;
+    color: var(--silver);
+  }
+
+  .cert-from {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--ash);
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+
+  /* ── CONTACT ── */
+  .contact-sec {
+    background: var(--off-black);
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 100px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-sec::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,255,0,0.06);
+    animation: pulse 4s ease-in-out infinite;
+  }
+
+  .contact-sec::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,255,0,0.1);
+    animation: pulse 4s 1s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    50%       { transform: translate(-50%, -50%) scale(1.1); opacity: 0.4; }
+  }
+
+  .contact-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 10vw, 120px);
+    line-height: 0.95;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 24px;
+  }
+
+  .contact-title span { color: var(--accent); }
+
+  .contact-email {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    color: var(--silver);
+    position: relative;
+    z-index: 1;
+    margin-bottom: 40px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--ash);
+    padding-bottom: 4px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .contact-email:hover { color: var(--accent); border-color: var(--accent); }
+
+  .contact-socials {
+    display: flex;
+    gap: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .social-pill {
+    padding: 12px 28px;
+    border: 1px solid var(--smoke);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mist);
+    text-decoration: none;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+  }
+
+  .social-pill:hover {
+    background: var(--accent);
+    color: var(--black);
+    border-color: var(--accent);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--black);
+    padding: 28px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--smoke);
+  }
+
+  footer span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ash);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── CREATIVE SERVICES ── */
+  .creative-sec {
+    background: var(--off-black);
+    padding: 100px 60px;
+  }
+
+  .creative-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    margin-bottom: 60px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  .creative-hero-text p {
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--silver);
+    max-width: 580px;
+    font-style: italic;
+  }
+
+  .creative-hero-text em { color: var(--accent); font-style: normal; }
+
+  .creative-hero-tag span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--accent);
+    padding: 10px 22px;
+    white-space: nowrap;
+  }
+
+  /* BIG SERVICE */
+  .service-big {
+    background: var(--charcoal);
+    padding: 56px 52px;
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 40px;
+    margin-bottom: 2px;
+    position: relative;
+    overflow: hidden;
+    border-left: 4px solid var(--accent);
+  }
+
+  .service-big::before {
+    content: 'END TO END';
+    position: absolute;
+    top: 20px; right: 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 100px;
+    color: rgba(212,255,0,0.04);
+    line-height: 1;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .service-big-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px;
+    color: var(--accent);
+    line-height: 1;
+    padding-top: 8px;
+  }
+
+  .service-big-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .service-big-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .service-big-desc {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--mist);
+    max-width: 600px;
+    margin-bottom: 40px;
+  }
+
+  .e2e-flow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .flow-step {
+    background: var(--smoke);
+    padding: 16px 20px;
+    min-width: 90px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .flow-step:hover { background: rgba(212,255,0,0.12); }
+
+  .flow-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .flow-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mist);
+    line-height: 1.4;
+  }
+
+  .flow-arrow {
+    font-size: 20px;
+    color: var(--ash);
+    flex-shrink: 0;
+  }
+
+  /* FOUR SERVICE CARDS */
+  .service-four {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    margin-bottom: 2px;
+  }
+
+  .svc-card {
+    background: var(--charcoal);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+    border-bottom: 3px solid transparent;
+  }
+
+  .svc-card:hover {
+    transform: translateY(-8px);
+    border-bottom-color: var(--card-accent, var(--accent));
+  }
+
+  .svc-card[data-color="#D4FF00"]:hover { border-bottom-color: #D4FF00; }
+  .svc-card[data-color="#FF4820"]:hover { border-bottom-color: #FF4820; }
+  .svc-card[data-color="#00C9A7"]:hover { border-bottom-color: #00C9A7; }
+  .svc-card[data-color="#C8A2FF"]:hover { border-bottom-color: #C8A2FF; }
+
+  .svc-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+  }
+
+  .svc-icon { font-size: 32px; }
+
+  .svc-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: rgba(255,255,255,0.06);
+    line-height: 1;
+  }
+
+  .svc-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    letter-spacing: 0.04em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  .svc-desc {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--mist);
+    margin-bottom: 24px;
+  }
+
+  .svc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .svc-tags span {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ash);
+    border: 1px solid var(--smoke);
+    padding: 4px 10px;
+  }
+
+  /* PROVEN STRIP */
+  .proven-strip {
+    background: var(--accent);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    position: relative;
+  }
+
+  .proven-item {
+    padding: 44px 40px;
+    text-align: center;
+    transition: background 0.2s;
+  }
+
+  .proven-item:hover { background: rgba(0,0,0,0.08); }
+
+  .proven-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 56px;
+    color: var(--black);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .proven-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.55);
+    line-height: 1.5;
+  }
+
+  .proven-divider {
+    width: 1px;
+    background: rgba(0,0,0,0.12);
+    position: absolute;
+    top: 20%; bottom: 20%;
+  }
+
+  .proven-divider:nth-child(2) { left: 25%; }
+  .proven-divider:nth-child(4) { left: 50%; }
+  .proven-divider:nth-child(6) { left: 75%; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .service-four { grid-template-columns: 1fr; }
+    .service-big { grid-template-columns: 1fr; gap: 20px; padding: 36px 24px; }
+    .e2e-flow { gap: 8px; }
+    .proven-strip { grid-template-columns: repeat(2, 1fr); }
+    .creative-hero { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links, .nav-handle { display: none; }
+    .hero { padding: 0 24px 60px; }
+    section { padding: 70px 24px; }
+    .about { grid-template-columns: 1fr; gap: 40px; }
+    .work-grid { grid-template-columns: 1fr; }
+    .ach-grid { grid-template-columns: repeat(2, 1fr); }
+    .awards-list { grid-template-columns: 1fr; }
+    .skills-cols { grid-template-columns: 1fr; gap: 40px; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; gap: 32px; }
+    .contact-sec { padding: 80px 24px; }
+    footer { padding: 24px; flex-direction: column; gap: 12px; }
+    .philosophy { padding: 70px 24px; }
+    .hero-bg-text { font-size: 120px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DERUZ</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#creative">Services</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <span class="nav-handle">@ekorsalmon</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-text">DERUZ</div>
+  <div class="hero-label">Brand Storyteller · Marcom Strategist · Indonesia</div>
+  <h1 class="hero-title">BRAND<br><span>STORIES</span><br>THAT MOVE</h1>
+  <div class="hero-bottom">
+    <p class="hero-bio">
+      Turning brands into movements — through sharp strategy,<br>
+      human stories, and campaigns that leave a mark.
+    </p>
+    <div class="hero-meta">
+      <div class="big-num">6+</div>
+      <div class="num-label">Years Building Brands</div>
+    </div>
+  </div>
+  <div class="scroll-line"><span>Scroll</span></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Brand Strategy</span>
+    <span class="marquee-item">Storytelling</span>
+    <span class="marquee-item">Campaign Execution</span>
+    <span class="marquee-item">FMCG Expert</span>
+    <span class="marquee-item">Community Marketing</span>
+    <span class="marquee-item">Social Media</span>
+    <span class="marquee-item">Brand Activation</span>
+    <span class="marquee-item">Audience Growth</span>
+    <!-- duplicate for seamless loop -->
+    <span class="marquee-item">Brand Strategy</span>
+    <span class="marquee-item">Storytelling</span>
+    <span class="marquee-item">Campaign Execution</span>
+    <span class="marquee-item">FMCG Expert</span>
+    <span class="marquee-item">Community Marketing</span>
+    <span class="marquee-item">Social Media</span>
+    <span class="marquee-item">Brand Activation</span>
+    <span class="marquee-item">Audience Growth</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-left">
+    <div class="sec-label reveal">The Person</div>
+    <h2 class="sec-title reveal">Who Is<br>Deruz?</h2>
+    <div class="about-text reveal">
+      <p>Dede Ruslan — known as <em>Deruz</em> — is a Brand & Marketing Strategist from Sukabumi, Indonesia, with over <em>6 years</em> of hands-on experience building brand presence from the ground up.</p>
+      <p>Specializing in <em>FMCG and community-driven campaigns</em>, he led regional marketing operations at PT Nojorono Tobacco International (Clas Mild), managing teams and executing 50+ integrated campaigns that moved real market share.</p>
+      <p>Beyond corporate work, he founded <em>Sahabat Lingkungan (saling.id)</em> — an environmental organization that now reaches 100,000+ people across Sukabumi. That's not just marketing. That's leadership through storytelling.</p>
+    </div>
+    <div class="about-handles reveal">
+      <div class="handle-row">
+        <span class="platform">Instagram</span>
+        <span class="handle-name">@ekorsalmon</span>
+      </div>
+      <div class="handle-row">
+        <span class="platform">TikTok</span>
+        <span class="handle-name">@ekorsalmon</span>
+      </div>
+      <div class="handle-row">
+        <span class="platform">LinkedIn</span>
+        <span class="handle-name">Dede Ruslan</span>
+      </div>
+      <div class="handle-row">
+        <span class="platform">Email</span>
+        <span class="handle-name">deruzganbante17@gmail.com</span>
+      </div>
+    </div>
+  </div>
+  <div class="about-right">
+    <div class="sec-label reveal">Brands Handled</div>
+    <div class="brand-list reveal">
+      <div class="brand-row">
+        <span class="brand-name">SALING.ID</span>
+        <span class="brand-tag">Founder · 2018–Now</span>
+      </div>
+      <div class="brand-row">
+        <span class="brand-name">DIPINDAHIN.ID</span>
+        <span class="brand-tag">Brand Management</span>
+      </div>
+      <div class="brand-row">
+        <span class="brand-name">SEEYOUSUNDAY.ID</span>
+        <span class="brand-tag">Brand Management</span>
+      </div>
+      <div class="brand-row">
+        <span class="brand-name">CLAS MILD</span>
+        <span class="brand-tag">Marcom · 2018–2024</span>
+      </div>
+      <div class="brand-row">
+        <span class="brand-name">INFO SUKABUMI</span>
+        <span class="brand-tag">Program Manager · 2021–2022</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="work" id="work">
+  <div class="sec-label reveal">Portfolio</div>
+  <h2 class="sec-title reveal">CAMPAIGNS<br>& RESULTS</h2>
+  <div class="work-grid">
+    <div class="work-card reveal" data-num="01">
+      <div class="work-accent">Brand Activation · FMCG</div>
+      <div class="work-title">CLAS MILD REGIONAL DOMINANCE</div>
+      <p class="work-desc">Built and executed 50+ integrated campaigns across Sukabumi — combining experiential marketing, community events, and strategic partnerships to dominate regional presence.</p>
+      <div class="work-stat">+80%</div>
+      <div class="work-stat-label">Brand Awareness Lift</div>
+    </div>
+    <div class="work-card reveal" data-num="02">
+      <div class="work-accent">Environmental Campaign · saling.id</div>
+      <div class="work-title">WORLD CLEANUP DAY SUKABUMI</div>
+      <p class="work-desc">Led World Cleanup Day campaigns 2019–2024. Developed narrative, mobilized community, coordinated 15+ government & private stakeholders. Turned an environmental cause into a citywide movement.</p>
+      <div class="work-stat">+70%</div>
+      <div class="work-stat-label">Participation Growth YoY</div>
+    </div>
+    <div class="work-card reveal" data-num="03">
+      <div class="work-accent">Digital Campaign · Eco Awareness</div>
+      <div class="work-title">ECO-FRIENDLY SUKABUMI</div>
+      <p class="work-desc">Multi-platform digital campaign fusing storytelling, content strategy, and community engagement. Reached 100,000+ residents, reduced waste 20% in participating areas. Recognized nationally.</p>
+      <div class="work-stat">100K+</div>
+      <div class="work-stat-label">Residents Reached</div>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<div class="philosophy">
+  <div class="sec-label">The Approach</div>
+  <p class="philosophy-quote">
+    "A brand without a story is just a <strong>logo</strong>. 
+    Great marketing doesn't sell products — it makes people 
+    feel like they're part of <strong>something bigger</strong> 
+    than themselves."
+  </p>
+</div>
+
+<!-- ACHIEVEMENTS -->
+<section class="achievements" id="achievements">
+  <div class="sec-label reveal">By The Numbers</div>
+  <h2 class="sec-title reveal">IMPACT &<br>NUMBERS</h2>
+  <div class="ach-grid">
+    <div class="ach-card reveal">
+      <span class="ach-icon">🎯</span>
+      <div class="ach-num">50+</div>
+      <div class="ach-label">Campaigns Led</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">👥</span>
+      <div class="ach-num">1K+</div>
+      <div class="ach-label">Program Participants</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">📈</span>
+      <div class="ach-num">70%</div>
+      <div class="ach-label">Avg Campaign ROI</div>
+    </div>
+    <div class="ach-card reveal">
+      <span class="ach-icon">🌍</span>
+      <div class="ach-num">100K</div>
+      <div class="ach-label">Digital Reach</div>
+    </div>
+  </div>
+  <div class="awards-list">
+    <div class="award-row reveal">
+      <div class="award-year">2026</div>
+      <div class="award-info">
+        <div class="award-name">LOCAL HEROES 2026</div>
+        <div class="award-detail">Community Impact Recognition</div>
+      </div>
+    </div>
+    <div class="award-row reveal">
+      <div class="award-year">2023</div>
+      <div class="award-info">
+        <div class="award-name">SUKABUMI HEROES</div>
+        <div class="award-detail">Environmental Initiatives</div>
+      </div>
+    </div>
+    <div class="award-row reveal">
+      <div class="award-year">2021</div>
+      <div class="award-info">
+        <div class="award-name">DANAKRITI AWARD</div>
+        <div class="award-detail">Excellence in Community-Driven Programs</div>
+      </div>
+    </div>
+    <div class="award-row reveal">
+      <div class="award-year">2013</div>
+      <div class="award-info">
+        <div class="award-name">PRESIDENT BEM CBI</div>
+        <div class="award-detail">Student Leadership</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-sec" id="skills">
+  <div class="sec-label reveal">Competencies</div>
+  <h2 class="sec-title reveal">SKILLS &<br>TOOLS</h2>
+  <div class="skills-cols">
+    <div>
+      <div class="skill-row reveal">
+        <div class="skill-top"><span>Brand Strategy & Positioning</span><span class="skill-pct">95%</span></div>
+        <div class="skill-track"><div class="skill-bar" data-w="95"></div></div>
+      </div>
+      <div class="skill-row reveal">
+        <div class="skill-top"><span>Storytelling & Brand Narrative</span><span class="skill-pct">97%</span></div>
+        <div class="skill-track"><div class="skill-bar" data-w="97"></div></div>
+      </div>
+      <div class="skill-row reveal">
+        <div class="skill-top"><span>Integrated Marketing Campaign</span><span class="skill-pct">92%</span></div>
+        <div class="skill-track"><div class="skill-bar" data-w="92"></div></div>
+      </div>
+      <div class="skill-row reveal">
+        <div class="skill-top"><span>Community & Experiential Marketing</span><span class="skill-pct">93%</span></div>
+        <div class="skill-track"><div class="skill-bar" data-w="93"></div></div>
+      </div>
+      <div class="skill-row reveal">
+        <div class="skill-top"><span>Consumer Insight Analysis</span><span class="skill-pct">88%</span></div>
+        <div class="skill-track"><div class="skill-bar" data-w="88"></div></div>
+      </div>
+      <div class="skill-row reveal">
+        <div class="skill-top"><span>Social Media Strategy</span><span class="skill-pct">90%</span></div>
+        <div class="skill-track"><div class="skill-bar" data-w="90"></div></div>
+      </div>
+      <div class="skill-row reveal">
+        <div class="skill-top"><span>Strategic Partnership Development</span><span class="skill-pct">89%</span></div>
+        <div class="skill-track"><div class="skill-bar" data-w="89"></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="sec-label reveal" style="margin-bottom:24px">Certifications</div>
+      <div class="certs reveal">
+        <div class="cert-item">
+          <div class="cert-dot"></div>
+          <div>
+            <div class="cert-name">Social Media Marketing Certification</div>
+            <div class="cert-from">HubSpot Academy · Valid 2026–2028</div>
+          </div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-dot" style="background:var(--accent)"></div>
+          <div>
+            <div class="cert-name">Sustainable Diets: One Planet, One Health</div>
+            <div class="cert-from">UNITAR – UN CC:Learn & Danone</div>
+          </div>
+        </div>
+        <div class="cert-item">
+          <div class="cert-dot" style="background:var(--accent2)"></div>
+          <div>
+            <div class="cert-name">Green Economy: Reshaping our Economies</div>
+            <div class="cert-from">UNITAR – UN CC:Learn</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:48px" class="reveal">
+        <div class="sec-label" style="margin-bottom:16px">Education</div>
+        <div style="margin-bottom:16px">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.06em">Bachelor's Degree – Communication</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mist);margin-top:4px">Institut Manajemen Wiyata Indonesia, Sukabumi</div>
+        </div>
+        <div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:0.06em">Diploma (D3) – Informatic Management</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--mist);margin-top:4px">Citra Buana Indonesia, Sukabumi</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CREATIVE SERVICES -->
+<section class="creative-sec" id="creative">
+  <div class="sec-label reveal">What I Deliver</div>
+  <h2 class="sec-title reveal">CREATIVE<br>CAPABILITIES</h2>
+
+  <div class="creative-hero reveal">
+    <div class="creative-hero-text">
+      <p>From a blank brief to a <em>viral feed</em> — every pixel, every frame, every caption is intentional. This is what end-to-end content creation looks like when strategy meets execution.</p>
+    </div>
+    <div class="creative-hero-tag">
+      <span>Full-Stack Content Creator</span>
+    </div>
+  </div>
+
+  <div class="service-stack">
+
+    <!-- END TO END -->
+    <div class="service-big reveal">
+      <div class="service-big-num">✦</div>
+      <div class="service-big-content">
+        <div class="service-big-label">The Complete Package</div>
+        <div class="service-big-title">END-TO-END<br>SOCIAL MEDIA</div>
+        <p class="service-big-desc">One person. Full ownership. From strategy deck to published post — I handle the entire pipeline so you don't have to manage a dozen vendors.</p>
+        <div class="e2e-flow">
+          <div class="flow-step">
+            <div class="flow-num">01</div>
+            <div class="flow-label">Research &<br>Strategy</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">02</div>
+            <div class="flow-label">Creative<br>Process</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">03</div>
+            <div class="flow-label">Content<br>Production</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">04</div>
+            <div class="flow-label">Publish &<br>Monitor</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step">
+            <div class="flow-num">05</div>
+            <div class="flow-label">Analyze &<br>Optimize</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOUR CARDS -->
+    <div class="service-four">
+
+      <div class="svc-card reveal" data-color="#D4FF00">
+        <div class="svc-card-top">
+          <span class="svc-icon">🎨</span>
+          <span class="svc-num">01</span>
+        </div>
+        <div class="svc-title">FEED DESIGN</div>
+        <p class="svc-desc">Cohesive, scroll-stopping grid aesthetics. Every post is designed as part of a bigger visual system — color palette, typography, layout grid — so your feed looks like a magazine, not a random collection.</p>
+        <div class="svc-tags">
+          <span>Visual Identity</span>
+          <span>Grid Planning</span>
+          <span>Brand Consistency</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal" data-color="#FF4820">
+        <div class="svc-card-top">
+          <span class="svc-icon">🎬</span>
+          <span class="svc-num">02</span>
+        </div>
+        <div class="svc-title">VIDEO EDITING</div>
+        <p class="svc-desc">Reels, TikTok, YouTube Shorts — edited to hook in the first 3 seconds. Pacing, transitions, captions, sound design, and color grading all dialed in for maximum watch time and shares.</p>
+        <div class="svc-tags">
+          <span>Reels & TikTok</span>
+          <span>Color Grading</span>
+          <span>Motion Text</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal" data-color="#00C9A7">
+        <div class="svc-card-top">
+          <span class="svc-icon">💡</span>
+          <span class="svc-num">03</span>
+        </div>
+        <div class="svc-title">CONTENT &<br>CREATIVE PROCESS</div>
+        <p class="svc-desc">Ideas that come from insight, not guesswork. I map audience behavior, spot content opportunities, build creative briefs, and produce content that actually resonates — not just fills the calendar.</p>
+        <div class="svc-tags">
+          <span>Content Pillars</span>
+          <span>Creative Briefs</span>
+          <span>Storytelling</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal" data-color="#C8A2FF">
+        <div class="svc-card-top">
+          <span class="svc-icon">📊</span>
+          <span class="svc-num">04</span>
+        </div>
+        <div class="svc-title">SOCIAL MEDIA<br>MANAGEMENT</div>
+        <p class="svc-desc">Day-to-day account ownership. Content calendar, posting schedule, community management, DM handling, analytics reporting, and monthly strategy reviews — all covered.</p>
+        <div class="svc-tags">
+          <span>Content Calendar</span>
+          <span>Community Mgmt</span>
+          <span>Monthly Report</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- PROVEN STRIP -->
+    <div class="proven-strip reveal">
+      <div class="proven-item">
+        <div class="proven-num">3</div>
+        <div class="proven-label">Active Brands<br>Managed Now</div>
+      </div>
+      <div class="proven-divider"></div>
+      <div class="proven-item">
+        <div class="proven-num">100K+</div>
+        <div class="proven-label">Total Audience<br>Reached</div>
+      </div>
+      <div class="proven-divider"></div>
+      <div class="proven-item">
+        <div class="proven-num">6yr</div>
+        <div class="proven-label">Content Creation<br>Experience</div>
+      </div>
+      <div class="proven-divider"></div>
+      <div class="proven-item">
+        <div class="proven-num">IG·TT</div>
+        <div class="proven-label">Platform<br>Expertise</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-sec" id="contact">
+  <div class="sec-label" style="position:relative;z-index:1">Let's Build Something</div>
+  <div class="contact-title">LET'S<br><span>TALK</span></div>
+  <a class="contact-email" href="mailto:deruzganbante17@gmail.com">deruzganbante17@gmail.com</a>
+  <div class="contact-socials">
+    <a class="social-pill" href="https://instagram.com/ekorsalmon" target="_blank">Instagram</a>
+    <a class="social-pill" href="https://tiktok.com/@ekorsalmon" target="_blank">TikTok</a>
+    <a class="social-pill" href="https://wa.me/628111165617" target="_blank">WhatsApp</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Dede Ruslan (Deruz) — Sukabumi, Indonesia</span>
+  <span>Brand Storyteller · Marcom Strategist</span>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  (function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  })();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        const bar = e.target.querySelector('.skill-bar');
+        if (bar) setTimeout(() => bar.style.width = bar.dataset.w + '%', 300);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  reveals.forEach(el => io.observe(el));
+
+  // Cursor hover effect
+  document.querySelectorAll('a, button, .brand-row, .work-card, .ach-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '24px';
+      cursor.style.height = '24px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+    });
+  });
+</script>
+</body>
+</html>
